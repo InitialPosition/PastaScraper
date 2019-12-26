@@ -1,8 +1,9 @@
+import argparse
 import threading
 from datetime import datetime
+from os import path, mkdir
+
 import requests
-from os import path, mkdir, walk
-import argparse
 
 try:
     from progress.bar import Bar
@@ -76,7 +77,7 @@ def main():
         status("Skipped {0} previously fetched pastes".format(skipped_pastes))
 
     status("Cleaning up internal ID list...")
-    while len(paste_ids) > 100:
+    while len(paste_ids) > max_id_list_size:
         paste_ids.pop(0)
 
     # start 60 second loop
@@ -89,7 +90,7 @@ if __name__ == '__main__':
 
     AUTHOR = "SYRAPT0R"
     COPYRIGHT = "2019"
-    VERSION = "0.3.0"
+    VERSION = "0.3.1"
 
     status("STARTING PASTA SCRAPER {0}, (c) {1} {2}".format(VERSION, COPYRIGHT, AUTHOR))
     print()
@@ -119,6 +120,7 @@ if __name__ == '__main__':
 
     # create paste ID index
     paste_ids = []
+    max_id_list_size = 200
 
     # preparation done, enter main loop
     status("Entering main loop...")
