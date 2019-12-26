@@ -11,5 +11,12 @@ A script to scrape all the magic pastebin has to offer
 ### Notes
 Please be aware that you have to whitelist your IP address on the [Pastebin Scraper API website](https://pastebin.com/doc_scraping_api). I will not take responsibility if you get banned from the scraper API.
 
+### Parameters
+Parameters are back baby
+
+| Parameter | Optional? | Effect |
+| --------- | --------- | ------ |
+| -k / --keywords | Yes | A file containing keywords to scrape for. One keyword per line. |
+
 ### Roadmap
-- [ ] Parameter input
+- [X] Parameter input
