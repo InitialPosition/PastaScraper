@@ -50,7 +50,7 @@ def main():
 
             if keywords is not None:
                 for keyword in keywords:
-                    if keyword.upper() in entry_request.text:
+                    if keyword.upper() in entry_request.text.upper():
                         print(" [KEYWORD] Paste \'{0}\' contains keyword \'{1}\'".format(entry["key"], keyword))
 
                         entry_file = open(path_t_important, "w+")
