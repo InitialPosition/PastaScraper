@@ -44,17 +44,19 @@ def main():
             entry_request = requests.get("https://scrape.pastebin.com/api_scrape_item.php?i={0}"
                                          .format(entry["key"]))
 
+            entry_content = entry_request.text
+
             entry_file = open(path_t, "w+")
-            entry_file.write(entry_request.text)
+            entry_file.write(entry_content)
             entry_file.close()
 
             if keywords is not None:
                 for keyword in keywords:
-                    if keyword.upper() in entry_request.text.upper():
+                    if keyword.upper() in entry_content.upper():
                         print(" [KEYWORD] Paste \'{0}\' contains keyword \'{1}\'".format(entry["key"], keyword))
 
                         entry_file = open(path_t_important, "w+")
-                        entry_file.write(entry_request.text)
+                        entry_file.write(entry_content)
                         entry_file.close()
 
                         break
@@ -91,6 +93,8 @@ if args.keywords is not None:
     f = open(args.keywords)
     keywords = f.readlines()
     f.close()
+
+    keywords = [keyword.strip() for keyword in keywords]
 
     status("Loaded {0} keywords".format(len(keywords)))
 
