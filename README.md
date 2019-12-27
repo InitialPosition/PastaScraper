@@ -10,6 +10,7 @@ A script to scrape all the magic pastebin has to offer
 
 ### Notes
 Please be aware that you have to whitelist your IP address on the [Pastebin Scraper API website](https://pastebin.com/doc_scraping_api). I will not take responsibility if you get banned from the scraper API.
+You also have to install the python module "progress". This can be done by running `python3 -m pip install progress`.
 
 ### Parameters
 Parameters are back baby
