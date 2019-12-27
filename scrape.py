@@ -1,6 +1,7 @@
 import argparse
 import threading
 from datetime import datetime
+from json import decoder
 from os import path, mkdir
 
 import requests
@@ -26,7 +27,13 @@ def main():
     fetch_limit = 100
 
     current_request = requests.get("https://scrape.pastebin.com/api_scraping.php?limit={0}".format(fetch_limit))
-    current_json = current_request.json()
+    try:
+        current_json = current_request.json()
+
+    except decoder.JSONDecodeError:
+        status("Unable to fetch latest pastes. Make sure your IP is whitelisted at "
+               "https://pastebin.com/doc_scraping_api")
+        exit(0)
 
     status("Pastes fetched. Processing...")
     skipped_pastes = 0
@@ -90,7 +97,7 @@ if __name__ == '__main__':
 
     AUTHOR = "SYRAPT0R"
     COPYRIGHT = "2019"
-    VERSION = "0.3.1"
+    VERSION = "0.3.2"
 
     status("STARTING PASTA SCRAPER {0}, (c) {1} {2}".format(VERSION, COPYRIGHT, AUTHOR))
     print()
