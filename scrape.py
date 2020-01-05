@@ -84,6 +84,12 @@ def main():
 
     bar.finish()
 
+    if args.infinite is None:
+        if not isfile("runfile"):
+            print()
+            status("Runfile no longer found, exiting...")
+            exit(0)
+
     if skipped_pastes is not 0:
         status("Skipped {0} previously fetched pastes".format(skipped_pastes))
 
@@ -94,20 +100,14 @@ def main():
     # start 60 second loop
     status("Hibernating for 60 seconds...")
     print()
-
-    if args.infinite is None:
-        if not isfile("runfile"):
-            status("Runfile no longer found, exiting...")
-            exit(0)
-
     threading.Timer(60, main).start()
 
 
 if __name__ == '__main__':
 
     AUTHOR = "SYRAPT0R"
-    COPYRIGHT = "2019"
-    VERSION = "0.4.1"
+    COPYRIGHT = "2019 - 2020"
+    VERSION = "0.4.2"
 
     status("STARTING PASTA SCRAPER {0}, (c) {1} {2}".format(VERSION, COPYRIGHT, AUTHOR))
     print()
