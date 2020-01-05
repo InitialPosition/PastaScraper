@@ -15,9 +15,10 @@ You also have to install the python module "progress". This can be done by runni
 ### Parameters
 Parameters are back baby
 
-| Parameter | Optional? | Effect |
-| --------- | --------- | ------ |
-| -k / --keywords | Yes | A file containing keywords to scrape for. One keyword per line. |
+| Parameter | Optional? | Default | Effect |
+| --------- | --------- | ------- | ------ |
+| -k / --keywords | Yes | None | A file containing keywords to scrape for. One keyword per line. |
+| -i / --infinite | Yes | No | Whether to run in infinite mode or in keyfile mode |
 
 ### Roadmap
 - [X] Parameter input

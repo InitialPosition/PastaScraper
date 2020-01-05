@@ -3,14 +3,17 @@ import threading
 from datetime import datetime
 from json import decoder
 from os import path, mkdir
+from os.path import isfile
 
 import requests
+import termcolor
 
 try:
     from progress.bar import Bar
 
 except ModuleNotFoundError:
-    print("Could not find the progress module. Run \"python3 -m pip install progress\" to install it.")
+    print(termcolor.colored("Could not find the progress module. Run \"python3 -m pip install progress\" to install it."
+                            , "red"))
     exit(0)
 
 
@@ -27,12 +30,13 @@ def main():
     fetch_limit = 100
 
     current_request = requests.get("https://scrape.pastebin.com/api_scraping.php?limit={0}".format(fetch_limit))
+
     try:
         current_json = current_request.json()
 
     except decoder.JSONDecodeError:
-        status("Unable to fetch latest pastes. Make sure your IP is whitelisted at "
-               "https://pastebin.com/doc_scraping_api")
+        status(termcolor.colored("Unable to fetch latest pastes. Make sure your IP is whitelisted at "
+                                 "https://pastebin.com/doc_scraping_api", "red"))
         exit(0)
 
     status("Pastes fetched. Processing...")
@@ -46,7 +50,6 @@ def main():
     # create a progress bar and start downloading pastes
     with Bar("Processing", max=len(current_json) - skipped_pastes, fill=">") as bar:
         for entry in current_json:
-            path_t_important = path.join("files", "{0}.txt".format(entry["key"]))
 
             # this file was already downloaded, skipping
             if entry["key"] in paste_ids:
@@ -57,14 +60,16 @@ def main():
                                          .format(entry["key"]))
 
             entry_content = entry_request.text
+            path_t_important = path.join("files", "{0}.txt".format(entry["key"]))
 
             paste_ids.append(entry["key"])
-
             # if we have a provided keyword list, check for keywords
             if keywords is not None:
                 for keyword in keywords:
                     if keyword.upper() in entry_content.upper():
-                        print(" [KEYWORD] Paste \'{0}\' contains keyword \'{1}\'".format(entry["key"], keyword))
+                        print(termcolor.colored(" [KEYWORD] Paste \'{0}\' contains keyword \'{1}\'".format(entry["key"]
+                                                                                                           , keyword)
+                                                , "green"))
 
                         entry_file = open(path_t_important, "w+")
                         entry_file.write(entry_content)
@@ -90,6 +95,12 @@ def main():
     # start 60 second loop
     status("Hibernating for 60 seconds...")
     print()
+
+    if args.infinite is None:
+        if not isfile("runfile"):
+            status("Runfile no longer found, exiting...")
+            exit(0)
+
     threading.Timer(60, main).start()
 
 
@@ -97,14 +108,14 @@ if __name__ == '__main__':
 
     AUTHOR = "SYRAPT0R"
     COPYRIGHT = "2019"
-    VERSION = "0.3.2"
+    VERSION = "0.4.0"
 
     status("STARTING PASTA SCRAPER {0}, (c) {1} {2}".format(VERSION, COPYRIGHT, AUTHOR))
     print()
 
     # make sure file directories exists
     if not path.isdir("files"):
-        status("No file directory found, creating...")
+        status(termcolor.colored("No file directory found, creating...", "yellow"))
         mkdir("files")
 
     # parse arguments
@@ -113,6 +124,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="A script to scrape pastebin.com with optional keyword search")
 
     parser.add_argument("-k", "--keywords", help="A file containing keywords for the search")
+    parser.add_argument("-i", "--infinite", help="Whether to run in infinite mode.")
 
     args = parser.parse_args()
 
@@ -128,6 +140,14 @@ if __name__ == '__main__':
     # create paste ID index
     paste_ids = []
     max_id_list_size = 200
+
+    # create non infinite file if needed
+    if args.infinite is None:
+        status("Creating run file...")
+        f = open("runfile", "w+")
+        f.close()
+    else:
+        status("Running in infinite mode...")
 
     # preparation done, enter main loop
     status("Entering main loop...")

@@ -128,8 +128,14 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# runfiles
+runfile
+
 # scraped files
 files/
 
 # keyword test files
 keywords.txt
+
+# pycharm stuff
+.idea/
