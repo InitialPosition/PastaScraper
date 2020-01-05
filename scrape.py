@@ -141,7 +141,7 @@ if __name__ == '__main__':
     max_id_list_size = 200
 
     # create non infinite file if needed
-    if args.infinite is None:
+    if args.infinite is False:
         status("Creating run file...")
         f = open("runfile", "w+")
         f.close()
