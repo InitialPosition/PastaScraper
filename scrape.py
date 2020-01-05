@@ -5,15 +5,14 @@ from json import decoder
 from os import path, mkdir
 from os.path import isfile
 
-import requests
-import termcolor
-
 try:
     from progress.bar import Bar
+    import requests
+    import termcolor
 
-except ModuleNotFoundError:
-    print(termcolor.colored("Could not find the progress module. Run \"python3 -m pip install progress\" to install it."
-                            , "red"))
+except ImportError:
+    print("You are missing modules. Run \"python3 -m pip install -r requirements.txt --user\" to "
+          "install them.")
     exit(0)
 
 
@@ -108,7 +107,7 @@ if __name__ == '__main__':
 
     AUTHOR = "SYRAPT0R"
     COPYRIGHT = "2019"
-    VERSION = "0.4.0"
+    VERSION = "0.4.1"
 
     status("STARTING PASTA SCRAPER {0}, (c) {1} {2}".format(VERSION, COPYRIGHT, AUTHOR))
     print()
