@@ -107,7 +107,7 @@ if __name__ == '__main__':
 
     AUTHOR = "SYRAPT0R"
     COPYRIGHT = "2019-2020"
-    VERSION = "0.4.2"
+    VERSION = "0.4.3"
 
     status("STARTING PASTA SCRAPER {0}, (c) {1} {2}".format(VERSION, COPYRIGHT, AUTHOR))
     print()
@@ -123,7 +123,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="A script to scrape pastebin.com with optional keyword search")
 
     parser.add_argument("-k", "--keywords", help="A file containing keywords for the search")
-    parser.add_argument("-i", "--infinite", help="Whether to run in infinite mode.")
+    parser.add_argument("-i", "--infinite", help="Whether to run in infinite mode.", action="store_true")
 
     args = parser.parse_args()
 
