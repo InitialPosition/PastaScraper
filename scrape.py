@@ -106,7 +106,7 @@ def main():
 if __name__ == '__main__':
 
     AUTHOR = "SYRAPT0R"
-    COPYRIGHT = "2019 - 2020"
+    COPYRIGHT = "2019-2020"
     VERSION = "0.4.2"
 
     status("STARTING PASTA SCRAPER {0}, (c) {1} {2}".format(VERSION, COPYRIGHT, AUTHOR))
