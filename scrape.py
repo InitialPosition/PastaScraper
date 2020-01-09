@@ -30,6 +30,7 @@ def main():
 
     current_request = requests.get("https://scrape.pastebin.com/api_scraping.php?limit={0}".format(fetch_limit))
 
+    current_json = []
     try:
         current_json = current_request.json()
 
@@ -39,21 +40,16 @@ def main():
         exit(0)
 
     status("Pastes fetched. Processing...")
-    skipped_pastes = 0
 
-    # determine how many new pastes we have to fetch
+    # clean up fetched ids
+    cleaned_json = []
     for entry in current_json:
-        if entry["key"] in paste_ids:
-            skipped_pastes += 1
+        if entry["key"] not in paste_ids:
+            cleaned_json.append(entry)
 
     # create a progress bar and start downloading pastes
-    with Bar("Processing", max=len(current_json) - skipped_pastes, fill=">") as bar:
-        for entry in current_json:
-
-            # this file was already downloaded, skipping
-            if entry["key"] in paste_ids:
-                continue
-
+    with Bar("Processing", max=len(cleaned_json), fill=">") as bar:
+        for entry in cleaned_json:
             # download the raw paste data
             entry_request = requests.get("https://scrape.pastebin.com/api_scrape_item.php?i={0}"
                                          .format(entry["key"]))
@@ -84,12 +80,13 @@ def main():
 
     bar.finish()
 
-    if args.infinite is None:
+    if args.infinite is False:
         if not isfile("runfile"):
             print()
             status("Runfile no longer found, exiting...")
             exit(0)
 
+    skipped_pastes = fetch_limit - len(cleaned_json)
     if skipped_pastes is not 0:
         status("Skipped {0} previously fetched pastes".format(skipped_pastes))
 
@@ -107,7 +104,7 @@ if __name__ == '__main__':
 
     AUTHOR = "SYRAPT0R"
     COPYRIGHT = "2019-2020"
-    VERSION = "0.4.3"
+    VERSION = "0.4.4"
 
     status("STARTING PASTA SCRAPER {0}, (c) {1} {2}".format(VERSION, COPYRIGHT, AUTHOR))
     print()
@@ -127,6 +124,14 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
+    # create non infinite file if needed
+    if args.infinite is False:
+        status("Creating run file...")
+        f = open("runfile", "w+")
+        f.close()
+    else:
+        status("Running in infinite mode...")
+
     if args.keywords is not None:
         f = open(args.keywords)
         keywords = f.readlines()
@@ -139,14 +144,6 @@ if __name__ == '__main__':
     # create paste ID index
     paste_ids = []
     max_id_list_size = 200
-
-    # create non infinite file if needed
-    if args.infinite is False:
-        status("Creating run file...")
-        f = open("runfile", "w+")
-        f.close()
-    else:
-        status("Running in infinite mode...")
 
     # preparation done, enter main loop
     status("Entering main loop...")
