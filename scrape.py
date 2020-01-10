@@ -66,13 +66,13 @@ def main():
                                                                                                            , keyword)
                                                 , "green"))
 
-                        entry_file = open(path_t_important, "w+")
+                        entry_file = open(path_t_important, "w+", encoding='utf-8')
                         entry_file.write(entry_content)
                         entry_file.close()
 
                         break
             else:
-                entry_file = open(path_t_important, "w+")
+                entry_file = open(path_t_important, "w+", encoding='utf-8')
                 entry_file.write(entry_content)
                 entry_file.close()
 
@@ -87,7 +87,7 @@ def main():
             exit(0)
 
     skipped_pastes = fetch_limit - len(cleaned_json)
-    if skipped_pastes is not 0:
+    if skipped_pastes != 0:
         status("Skipped {0} previously fetched pastes".format(skipped_pastes))
 
     status("Cleaning up internal ID list...")
@@ -127,7 +127,7 @@ if __name__ == '__main__':
     # create non infinite file if needed
     if args.infinite is False:
         status("Creating run file...")
-        f = open("runfile", "w+")
+        f = open("runfile", "w+", encoding='utf-8')
         f.close()
     else:
         status("Running in infinite mode...")
