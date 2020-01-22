@@ -22,3 +22,4 @@ Parameters are back baby
 
 ### Roadmap
 - [X] Parameter input
+- [ ] Index file for keywords

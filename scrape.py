@@ -11,7 +11,7 @@ try:
     import termcolor
 
 except ImportError:
-    print("You are missing modules. Run \"python3 -m pip install -r requirements.txt --user\" to "
+    print("You are missing modules. Run \"python3 -m pip install -r requirements.txt\" to "
           "install them.")
     exit(0)
 
