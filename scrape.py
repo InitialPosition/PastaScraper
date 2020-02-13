@@ -76,6 +76,9 @@ def main():
                                                                                                        keyword),
                                                                               "green")
 
+                        if args.noSorting is False:
+                            path_file = path.join("files", keyword, "{0}.txt".format(entry["key"]))
+
                         with open(path_file, "w+", encoding='utf-8') as entry_file:
                             entry_file.write(entry_content)
 
@@ -83,6 +86,7 @@ def main():
             else:
                 with open(path_file, "w+", encoding='utf-8') as entry_file:
                     entry_file.write(entry_content)
+
                 bar.suffix = "%(index)d/%(max)d Saving paste \'{0}\'".format(entry["key"])
 
             bar.next()
@@ -113,7 +117,7 @@ if __name__ == '__main__':
 
     AUTHOR = "SYRAPT0R"
     COPYRIGHT = "2019-2020"
-    VERSION = "0.4.5"
+    VERSION = "0.5"
 
     # parse arguments
     keywords = None
@@ -122,6 +126,8 @@ if __name__ == '__main__':
 
     parser.add_argument("-k", "--keywords", help="A file containing keywords for the search")
     parser.add_argument("-i", "--infinite", help="Whether to run in infinite mode (Default: false)",
+                        action="store_true", default=False)
+    parser.add_argument("-nS", "--noSorting", help="Whether to sort keyword pastes into subdirectories",
                         action="store_true", default=False)
 
     args = parser.parse_args()
@@ -141,10 +147,17 @@ if __name__ == '__main__':
 
         except IOError:
             status(termcolor.colored("Unable to load specified keyword file. Aborting...", "red"))
-
             exit(0)
 
         keywords = [keyword.strip() for keyword in keywords]
+
+        # create subdirectories if required
+        if args.noSorting is False:
+            for keyword in keywords:
+                current_path = path.join("files", keyword)
+                if not path.isdir(current_path):
+                    status(termcolor.colored("Creating directory {0}".format(current_path), "yellow"))
+                    mkdir(current_path)
 
         status("Loaded {0} keywords".format(len(keywords)))
 

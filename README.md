@@ -18,8 +18,9 @@ Parameters are back baby
 | Parameter | Optional? | Default | Effect |
 | --------- | --------- | ------- | ------ |
 | -k / --keywords | Yes | None | A file containing keywords to scrape for. One keyword per line. |
-| -i / --infinite | Yes | No | Whether to run in infinite mode or in keyfile mode |
+| -i / --infinite | Yes | False | Whether to run in infinite mode or in keyfile mode |
+| -nS / --noSorting | Yes | False | Whether to sort keyword pastes into subdirectories |
 
 ### Roadmap
 - [X] Parameter input
-- [ ] Index file for keywords
+- [X] Index for keywords

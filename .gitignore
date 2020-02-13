@@ -139,3 +139,6 @@ keywords.txt
 
 # pycharm stuff
 .idea/
+
+# vscode
+.vscode/
