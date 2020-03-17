@@ -55,43 +55,48 @@ def main():
         if entry["key"] not in paste_ids:
             cleaned_json.append(entry)
 
-    # create a progress bar and start downloading pastes
-    with Bar("Processing", max=len(cleaned_json), fill=">") as bar:
-        for entry in cleaned_json:
-            # download the raw paste data
-            entry_request = requests.get("https://scrape.pastebin.com/api_scrape_item.php?i={0}"
-                                         .format(entry["key"]))
+    # create a progress bar and start downloading pastes if we have new ones
+    if len(cleaned_json) is not 0:
+        with Bar("Processing", max=len(cleaned_json), fill=">") as bar:
+            for entry in cleaned_json:
+                # download the raw paste data
+                entry_request = requests.get("https://scrape.pastebin.com/api_scrape_item.php?i={0}"
+                                             .format(entry["key"]))
 
-            entry_content = entry_request.text
-            path_file = path.join("files", "{0}.txt".format(entry["key"]))
+                entry_content = entry_request.text
+                path_file = path.join("files", "{0}.txt".format(entry["key"]))
 
-            paste_ids.append(entry["key"])
+                paste_ids.append(entry["key"])
 
-            # if we have a provided keyword list, check for keywords
-            if keywords is not None:
-                for keyword in keywords:
-                    if keyword.upper() in entry_content.upper():
-                        bar.suffix = "%(index)d/%(max)d " + termcolor.colored("[KEYWORD] Paste \'{0}\' contains "
-                                                                              "keyword \'{1}\'".format(entry["key"],
-                                                                                                       keyword),
-                                                                              "green")
+                # if we have a provided keyword list, check for keywords
+                if keywords is not None:
+                    for keyword in keywords:
+                        if keyword.upper() in entry_content.upper():
+                            bar.suffix = "%(index)d/%(max)d " + termcolor.colored("[KEYWORD] Paste \'{0}\' contains "
+                                                                                  "keyword \'{1}\'".format(entry["key"],
+                                                                                                           keyword),
+                                                                                  "green")
 
-                        if args.noSorting is False:
-                            path_file = path.join("files", keyword, "{0}.txt".format(entry["key"]))
+                            if args.noSorting is False:
+                                path_file = path.join("files", keyword, "{0}.txt".format(entry["key"]))
 
-                        with open(path_file, "w+", encoding='utf-8') as entry_file:
-                            entry_file.write(entry_content)
+                            with open(path_file, "w+", encoding='utf-8') as entry_file:
+                                entry_file.write(entry_content)
 
-                        break
-            else:
-                with open(path_file, "w+", encoding='utf-8') as entry_file:
-                    entry_file.write(entry_content)
+                            break
+                else:
+                    with open(path_file, "w+", encoding='utf-8') as entry_file:
+                        entry_file.write(entry_content)
 
-                bar.suffix = "%(index)d/%(max)d Saving paste \'{0}\'".format(entry["key"])
+                    bar.suffix = "%(index)d/%(max)d Saving paste \'{0}\'".format(entry["key"])
 
-            bar.next()
+                bar.next()
 
-    bar.finish()
+        bar.finish()
+
+    # otherwise, just say that we didn't have any new content
+    else:
+        status("No new pastes found, skipping downloads...")
 
     if args.infinite is False:
         if not isfile("runfile"):
@@ -117,7 +122,7 @@ if __name__ == '__main__':
 
     AUTHOR = "SYRAPT0R"
     COPYRIGHT = "2019-2020"
-    VERSION = "0.5"
+    VERSION = "0.5.1"
 
     # parse arguments
     keywords = None
