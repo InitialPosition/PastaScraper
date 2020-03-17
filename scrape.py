@@ -4,6 +4,7 @@ from datetime import datetime
 from json import decoder
 from os import path, mkdir, remove
 from os.path import isfile
+from time import sleep
 
 try:
     from progress.bar import Bar
@@ -114,15 +115,22 @@ def main():
 
     # start 60 second loop
     status("Hibernating for 60 seconds...")
+    with Bar("Hibernating", max=60, fill=">", suffix="") as bar:
+        for i in range(60):
+            sleep(1)
+            bar.next()
+
+        bar.finish()
+
     print()
-    threading.Timer(60, main).start()
+    threading.Timer(0, main).start()
 
 
 if __name__ == '__main__':
 
     AUTHOR = "SYRAPT0R"
     COPYRIGHT = "2019-2020"
-    VERSION = "0.5.1"
+    VERSION = "0.5.2"
 
     # parse arguments
     keywords = None
