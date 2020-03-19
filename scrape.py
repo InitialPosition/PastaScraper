@@ -1,9 +1,9 @@
 import argparse
-import threading
 from datetime import datetime
 from json import decoder
 from os import path, mkdir, remove
 from os.path import isfile
+from threading import Thread
 from time import sleep
 
 try:
@@ -123,14 +123,14 @@ def main():
         bar.finish()
 
     print()
-    threading.Timer(0, main).start()
+    Thread(main()).start()
 
 
 if __name__ == '__main__':
 
     AUTHOR = "SYRAPT0R"
     COPYRIGHT = "2019-2020"
-    VERSION = "0.5.2"
+    VERSION = "0.5.3"
 
     # parse arguments
     keywords = None
