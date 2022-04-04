@@ -129,7 +129,7 @@ def main():
 if __name__ == '__main__':
 
     AUTHOR = "SYRAPT0R"
-    COPYRIGHT = "2019-2020"
+    COPYRIGHT = "2019-2022"
     VERSION = "0.5.3"
 
     # parse arguments
